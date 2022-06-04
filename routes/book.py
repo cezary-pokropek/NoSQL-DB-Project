@@ -16,7 +16,7 @@ async def find_one_book(id):
 @book.post('/')
 async def create_book(book: Book):
     conn.local.books.insert_one(dict(book))
-    return serializeList(conn.local.books.find())
+    return serializeList(conn.local.books.find().sort("_id", -1).limit(1))
 
 @book.put('/{id}')
 async def update_book(id,book: Book):
