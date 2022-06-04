@@ -1,30 +1,28 @@
 from fastapi import APIRouter
-from models.user import User 
+from models.user import Book 
 from config.db import conn 
 from schemas.user import serializeDict, serializeList
 from bson import ObjectId
-user = APIRouter() 
+book = APIRouter() 
 
-@user.get('/')
-async def find_all_users():
-    return serializeList(conn.local.user.find())
+@book.get('/')
+async def find_all_books():
+    return serializeList(conn.local.books.find())
 
-@user.get('/{id}')
-async def find_one_user(id):
-    return serializeDict(conn.local.user.find_one({"_id":ObjectId(id)}))
+@book.get('/{id}')
+async def find_one_book(id):
+    return serializeDict(conn.local.books.find_one({"_id":ObjectId(id)}))
 
-@user.post('/')
-async def create_user(user: User):
-    conn.local.user.insert_one(dict(user))
-    return serializeList(conn.local.user.find())
+@book.post('/')
+async def create_book(book: Book):
+    conn.local.books.insert_one(dict(book))
+    return serializeList(conn.local.books.find())
 
-@user.put('/{id}')
-async def update_user(id,user: User):
-    conn.local.user.find_one_and_update({"_id":ObjectId(id)},{
-        "$set":dict(user)
-    })
-    return serializeDict(conn.local.user.find_one({"_id":ObjectId(id)}))
+@book.put('/{id}')
+async def update_book(id,book: Book):
+    conn.local.books.find_one_and_update({"_id":ObjectId(id)},{"$set":dict(book)})
+    return serializeDict(conn.local.books.find_one({"_id":ObjectId(id)}))
 
-@user.delete('/{id}')
-async def delete_user(id,user: User):
-    return serializeDict(conn.local.user.find_one_and_delete({"_id":ObjectId(id)}))
+@book.delete('/{id}')
+async def delete_book(id):
+    return serializeDict(conn.local.books.find_one_and_delete({"_id":ObjectId(id)}))
