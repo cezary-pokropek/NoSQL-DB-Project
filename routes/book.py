@@ -11,9 +11,6 @@ async def find_all_books():
 
 @book.get('/{id}')
 async def find_one_book(id):
-    print(serializeDict(conn.local.books.find_one({"_id":ObjectId(id)})))
-    # if serializeDict(conn.local.books.find_one({"_id":ObjectId(id)})) == []:
-    #     return []
     return serializeDict(conn.local.books.find_one({"_id":ObjectId(id)}))
 
 @book.post('/')
