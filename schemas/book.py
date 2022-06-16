@@ -5,5 +5,5 @@ def serializeDict(a) -> dict:
         result = []
     return result
 
-def serializeList(entity) -> list:
-    return [serializeDict(a) for a in entity]
+# def serializeList(entity) -> list:
+#     return [serializeDict(a) for a in entity]

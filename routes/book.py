@@ -1,28 +1,14 @@
 from fastapi import APIRouter
-from models.book import Book 
+# from models.book import Book 
 from config.db import conn 
-from schemas.book import serializeDict, serializeList
+from schemas.book import serializeDict # , serializeList
 from bson import ObjectId
 book = APIRouter() 
 
-@book.get('/')
-async def find_all_books():
-    return serializeList(conn.local.books.find())
+@book.get('/{book_id}')
+async def find_book_by_id(book_id):
+    return serializeDict(conn.bgd.books.find_one({"_id":ObjectId(book_id)}))
 
-@book.get('/{id}')
-async def find_one_book(id):
-    return serializeDict(conn.local.books.find_one({"_id":ObjectId(id)}))
-
-@book.post('/')
-async def create_book(book: Book):
-    conn.local.books.insert_one(dict(book))
-    return serializeList(conn.local.books.find().sort("_id", -1).limit(1))
-
-@book.put('/{id}')
-async def update_book(id,book: Book):
-    conn.local.books.find_one_and_update({"_id":ObjectId(id)},{"$set":dict(book)})
-    return serializeDict(conn.local.books.find_one({"_id":ObjectId(id)}))
-
-@book.delete('/{id}')
-async def delete_book(id):
-    return serializeDict(conn.local.books.find_one_and_delete({"_id":ObjectId(id)}))
+@book.get('/{author_id}')
+async def find_author_by_id(author_id):
+    return serializeDict(conn.bgd.authors.find_one({"_id":ObjectId(author_id)}))
