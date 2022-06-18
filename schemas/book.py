@@ -4,6 +4,3 @@ def serializeDict(a) -> dict:
     except TypeError: 
         result = []
     return result
-
-# def serializeList(entity) -> list:
-#     return [serializeDict(a) for a in entity]
